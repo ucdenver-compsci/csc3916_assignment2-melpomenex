@@ -22,6 +22,10 @@
             "type": "node"
         },
         {
+             "args": [
+                "-r",
+                "dotenv/config",
+            ],
             "type": "node",
             "request": "launch",
             "name": "Launch Program",

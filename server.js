@@ -72,7 +72,7 @@ router.post('/signin', (req, res) => {
     }
 });
 
-router.route('/testcollection')
+router.route('/movies')
     .delete(authController.isAuthenticated, (req, res) => {
         console.log(req.body);
         res = res.status(200);
@@ -80,6 +80,7 @@ router.route('/testcollection')
             res = res.type(req.get('Content-Type'));
         }
         var o = getJSONObjectForMovieRequirement(req);
+        o.message = "movie deleted";
         res.json(o);
     }
     )
@@ -90,9 +91,23 @@ router.route('/testcollection')
             res = res.type(req.get('Content-Type'));
         }
         var o = getJSONObjectForMovieRequirement(req);
+        o.message = "movie updated";
         res.json(o);
     }
-    );
+    )
+    .post(authJwtController.isAuthenticated, (req, res) => {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get('Content-Type')) {
+            res = res.type(req.get('Content-Type'));
+        }
+        var o = getJSONObjectForMovieRequirement(req);
+        o.message = "movie saved";
+        res.json(o);
+    })
+    .all((req, res) => {
+        res.status(405).send("The HTTP method is not supported by the /movies route.");
+    });
     
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
