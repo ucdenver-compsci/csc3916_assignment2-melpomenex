@@ -73,63 +73,49 @@ router.post('/signin', (req, res) => {
 });
 
 router.route('/movies')
-    .get(authController.isAuthenticated, (req, res) => {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get('Content-Type')) {
-            res = res.type(req.get('Content-Type'));
-        }
-        var o = getJSONObjectForMovieRequirement(req);
-        o.status = 200;
-        o.message = "GET movies";
-        o.headers = req.headers;
-        o.environment = process.env.UNIQUE_KEY;
-        res.json(o);
-    }
-    )
-    .delete(authController.isAuthenticated, (req, res) => {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get('Content-Type')) {
-            res = res.type(req.get('Content-Type'));
-        }
-        var o = getJSONObjectForMovieRequirement(req);
-        o.status = 200;
-        o.message = "movie deleted";
-        o.headers = req.headers;
-        o.environment = process.env.UNIQUE_KEY;
-        res.json(o);
-    }
-    )
-    .put(authJwtController.isAuthenticated, (req, res) => {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get('Content-Type')) {
-            res = res.type(req.get('Content-Type'));
-        }
-        var o = getJSONObjectForMovieRequirement(req);
-        o.status = 200;
-        o.message = "movie updated";
-        o.headers = req.headers;
-        o.environment = process.env.UNIQUE_KEY;
-        res.json(o);
-    }
-    )
-    .post(authJwtController.isAuthenticated, (req, res) => {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get('Content-Type')) {
-            res = res.type(req.get('Content-Type'));
-        }
-        var o = getJSONObjectForMovieRequirement(req);
-        o.status = 200;
-        o.message = "movie saved";
-        o.headers = req.headers;
-        o.environment = process.env.UNIQUE_KEY;
-        res.json(o);
+    .get((req, res) => {
+        // GET does not require authentication
+        var o = {
+            status: 200,
+            message: "GET movies",
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        };
+        res.status(200).json(o);
     })
-    .all((req, res) => {
-        res.status(405).send("The HTTP method is not supported by the /movies route.");
+    .post(authJwtController.isAuthenticated, (req, res) => {
+        // POST requires JWT authentication
+        var o = {
+            status: 200,
+            message: "movie saved",
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        };
+        res.status(200).json(o);
+    })
+    .put(authJwtController.isAuthenticated, (req, res) => {
+        // PUT requires JWT authentication
+        var o = {
+            status: 200,
+            message: "movie updated",
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        };
+        res.status(200).json(o);
+    })
+    .delete(authController.isAuthenticated, (req, res) => {
+        // DELETE requires Basic authentication
+        var o = {
+            status: 200,
+            message: "movie deleted",
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        };
+        res.status(200).json(o);
     });
     
 app.use('/', router);
