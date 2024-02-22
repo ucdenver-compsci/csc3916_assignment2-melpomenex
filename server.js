@@ -120,17 +120,11 @@ router.route('/movies')
     }
     )
     .put(authJwtController.isAuthenticated, (req, res) => {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get('Content-Type')) {
-            res = res.type(req.get('Content-Type'));
-        }
         var o = getJSONObjectForMovieRequirement(req);
         o.status = 200;
         o.message = "movie updated";
         res.json(o);
-    }
-    )
+    })
     .post((req, res) => {
         console.log(req.body);
         res = res.status(200);
