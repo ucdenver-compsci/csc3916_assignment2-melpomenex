@@ -124,7 +124,8 @@ router.route('/movies')
         o.status = 200;
         o.message = "movie updated";
         res.json(o);
-    })
+    }
+    )
     .post((req, res) => {
         console.log(req.body);
         res = res.status(200);
