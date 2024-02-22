@@ -131,7 +131,7 @@ router.route('/movies')
         res.json(o);
     }
     )
-    .post(authJwtController.isAuthenticated, (req, res) => {
+    .post((req, res) => {
         console.log(req.body);
         res = res.status(200);
         if (req.get('Content-Type')) {
